@@ -1,0 +1,30 @@
+#!/bin/bash
+
+if [ -r "$1" ]; then
+  if [[ "$1" == *.nrrd ]]; then
+
+    fname="$1";
+    basename=${fname%.nrrd};
+    if [[ "${basename}" == *X ]]; then
+      basename=${basename%X};
+    fi
+
+    Lnrrd="${basename}L.nrrd";
+    Loff="${basename}L.off";
+
+    ./ivol4D ${fname} ${Lnrrd};
+    ~/workspace/ivoldual/isodual/isodual -position ivol_lifted02 1 ${Lnrrd}
+    cp "${Loff}" ~/workspace/python/test1/output.off;
+  else
+    echo "File \"${fname}\" does not have suffix \".nrrd\".";
+    exit;
+  fi
+else
+  echo "Can't read file ${fname}.";
+  exit;
+fi
+
+
+
+  
+  
